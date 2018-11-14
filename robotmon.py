@@ -181,15 +181,22 @@ def snd():
                 print "Check status: ", dbchk
                 if dbchk == []:
                     sql = "select product from ztta_products where progname = '"+ str(content['progid'])+"' and ucount = "+ str(content['count'])+" ;"
-                    prodname = dbrd(sql)[0]
-                    print str(prodname[0])
-                    sql = "INSERT INTO ztta_robometr (robotid, progname, robotspeed, robotstatus, rtmstmp, ucount, eventdate) VALUES ('" + str(content['robotId']) + "', '" + str(prodname[0]) + "', '" + str(content['robotspeed'])+ "', '" + str(content['robotstatus']) +"', '"+ str(content['timeid'])+"', '"+ str(content['count'])+"', '"+ str(ts)+"');"
-                    print sql
-                    dbwrt(sql)
+                    prodname = dbrd(sql)
+                    print "Product: ", prodname
+                    if prodname != []:
+                        prodname = prodname[0]
+                        print prodname
+                        sql = "INSERT INTO ztta_robometr (robotid, progname, robotspeed, robotstatus, rtmstmp, ucount, eventdate) VALUES ('" + str(content['robotid']) + "', '" + str(prodname[0]) + "', '" + str(content['robotspeed'])+ "', '" + str(content['robotstatus']) +"', '"+ str(content['timeid'])+"', '"+ str(content['count'])+"', '"+ str(ts)+"');"
+                        print sql
+                        dbwrt(sql)
+                    else:
+                        sql = "INSERT INTO ztta_robometr (robotid, progname, robotspeed, robotstatus, rtmstmp, ucount, eventdate) VALUES ('" + str(content['robotid']) + "', '" + str(content['progid']) + "', '" + str(content['robotspeed'])+ "', '" + str(content['robotstatus']) +"', '"+ str(content['timeid'])+"', '"+ str(content['count'])+"', '"+ str(ts)+"');"
+                        print sql
+                        dbwrt(sql)
                 else:
                     print 'Dont repeat!!!'
             else:
-                sql = "INSERT INTO ztta_robometr (robotid, progname, robotspeed, robotstatus, ucount, eventdate) VALUES ('" + str(content['robotId']) + "', '" + str(content['progid'])+ "', '" + str(content['robotspeed'])+ "', '" + str(content['robotstatus']) +"', '"+ str(content['count'])+"', '"+ str(ts)+"');"
+                sql = "INSERT INTO ztta_robometr (robotid, progname, robotspeed, robotstatus, ucount, eventdate) VALUES ('" + str(content['robotid']) + "', '" + str(content['progid'])+ "', '" + str(content['robotspeed'])+ "', '" + str(content['robotstatus']) +"', '"+ str(content['count'])+"', '"+ str(ts)+"');"
                 dbwrt(sql)
             return 'Done'
         except:
